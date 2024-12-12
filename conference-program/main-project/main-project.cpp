@@ -9,9 +9,11 @@ using namespace std;
 
 int main() {
     setlocale(LC_ALL, "Russian");
-    cout << "Лабораторная работа №8. GIT\n";
-    cout << "Вариант №0. Библиотечный отчет\n";
-    cout << "Автор: Сергей Ермоченко\n\n";
+    cout << "Laboratory work #8. GIT\n";
+    cout << "Variant #2. Conference Program.\n";
+    cout << "Author: Ivan Bobrov\n";
+    cout << "Group: 24Ping1D\n";
+    
     int size;
     Report** reports;
     // Считывание данных из файла
@@ -44,5 +46,5 @@ int main() {
         cout << setw(2) << setfill('0') << report.end << '\n';
     }
 
-    return 0;
+   
 }
