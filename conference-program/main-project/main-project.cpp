@@ -1,9 +1,9 @@
 #include <iostream>
 #include <iomanip>
-#include <string>
-#include "Report.h"
+#include <vector>
 #include "file_reader.h"
 #include "constants.h"
+#include "Report.h"
 
 using namespace std;
 
@@ -12,39 +12,36 @@ int main() {
     cout << "Лабораторная работа №8. GIT\n";
     cout << "Вариант №0. Библиотечный отчет\n";
     cout << "Автор: Сергей Ермоченко\n\n";
-
-    // Массив указателей на доклады
-    Report* reports[MAX_FILE_ROWS_COUNT];
-
     int size;
+    Report** reports;
+    // Считывание данных из файла
+    read("data.txt", reports, size);
 
-    try {
-        // Считываем данные из файла
-        read("data.txt", reports, size);
-
-        // Выводим содержимое
-        for (int i = 0; i < size; i++) {
-            cout << reports[i]->surname << '\n';
-            cout << reports[i]->name << '\n';
-            cout << reports[i]->patronymic << '\n';
-
-            cout << "Время начала: " << setw(2) << setfill('0') << reports[i]->start / 100 << ":"
-                << setw(2) << setfill('0') << reports[i]->start % 100 << '\n';
-
-            cout << "Время окончания: " << setw(2) << setfill('0') << reports[i]->end / 100 << ":"
-                << setw(2) << setfill('0') << reports[i]->end % 100 << '\n';
-
-            cout << "Тема доклада: " << reports[i]->topic << '\n';
-            cout << '\n';
-        }
-
-        // Освобождаем память
-        for (int i = 0; i < size; i++) {
-            delete reports[i];
-        }
+    if (reports.empty()) {
+        cout << "Данные отсутствуют или произошла ошибка при чтении файла.\n";
+        return 1;
     }
-    catch (const char* error) {
-        cout << error << '\n';
+
+    cout << "***** Библиотечный отчет *****\n\n";
+    for (const auto& report : reports) {
+        /********** вывод читателя **********/
+        cout << "Читатель........: ";
+        cout << report.surname << " ";
+        cout << report.name[0] << ". ";
+        cout << report.patronymic[0] << ".\n";
+
+        /********** вывод книги **********/
+        cout << "Тема............: ";
+        cout << '"' << report.topic << "\"\n";
+
+        /********** вывод даты начала **********/
+        cout << "Время начала.....: ";
+        cout << setw(4) << setfill('0') << report.start << '\n';
+            
+
+        /********** вывод даты окончания **********/
+        cout << "Время окончания..: ";
+        cout << setw(2) << setfill('0') << report.end << '\n';
     }
 
     return 0;
