@@ -7,7 +7,15 @@ int calculateDuration(const Report* report) {
     int endHours = report->end / 100;
     int endMinutes = report->end % 100;
 
-    return (endHours * 60 + endMinutes) - (startHours * 60 + startMinutes);
+    // Вычисляем разницу в минутах
+    int totalMinutes = (endHours * 60 + endMinutes) - (startHours * 60 + startMinutes);
+
+    // Преобразуем разницу в часы и минуты
+    int durationHours = totalMinutes / 60;
+    int durationMinutes = totalMinutes % 60;
+
+    // Преобразуем в формат ЧЧММ
+    return durationHours * 100 + durationMinutes;
 }
 
 
@@ -27,6 +35,5 @@ int process(Report* array[], int size) {
         }
     }
 
-    std::cout << array[longestIndex]; 
-    return 0;
+    return calculateDuration(array[longestIndex]);
 }
