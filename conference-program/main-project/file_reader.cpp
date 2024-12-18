@@ -1,29 +1,36 @@
 #include "file_reader.h"
+#include "constants.h"
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <iostream>
 
-void read(const std::string& filename, Report* reports[], int& size) {
+std::vector<Report> FileReader::readFromFile(const std::string& filename) {
     std::ifstream file(filename);
-    size = 0;
+    std::vector<Report> reports;
 
     if (!file.is_open()) {
-        throw "Ошибка: не удалось открыть файл.";
+        std::cerr << "Ошибка: не удалось открыть файл " << filename << "\n";
+        return reports;
     }
 
     std::string line;
-    while (std::getline(file, line) && size < MAX_FILE_ROWS_COUNT) {
+    while (std::getline(file, line) && reports.size() < MAX_FILE_ROWS_COUNT) {
+        if (line.length() > MAX_STRING_SIZE) {
+            std::cerr << "Ошибка: строка превышает максимальный размер " << MAX_STRING_SIZE << " символов.\n";
+            continue;
+        }
+
         std::istringstream iss(line);
-        Report* report = new Report;
+        Report report;
 
-        iss >> report->start >> report->end;
-        iss >> report->surname >> report->name >> report->patronymic;
+        iss >> report.start >> report.end >> report.surname >> report.name >> report.patronymic;
+        std::getline(iss, report.topic); // Читаем оставшуюся часть строки как тему
+        report.topic.erase(0, report.topic.find_first_not_of(" ")); // Убираем ведущие пробелы
 
-        std::getline(iss, report->topic);
-        report->topic.erase(0, report->topic.find_first_not_of(" ")); // Убираем пробелы
-
-        reports[size++] = report;
+        reports.push_back(report);
     }
 
     file.close();
+    return reports;
 }

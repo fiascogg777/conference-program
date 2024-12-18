@@ -2,9 +2,13 @@
 #define FILE_READER_H
 
 #include "Report.h"
-#include "constants.h"
+#include <vector>
 #include <string>
 
-void read(const std::string& filename, Report* reports[], int& size);
+class FileReader {
+public:
+    // Метод для чтения данных из файла
+    static std::vector<Report> readFromFile(const std::string& filename);
+};
 
-#endif // FILE_READER_H
+#endif
